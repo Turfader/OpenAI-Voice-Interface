@@ -1,6 +1,5 @@
 from gtts import gTTS
-import pygame
-# come back to the playsound library! It just doesn't want to work rn
+from playsound import playsound
 
 
 def read(text):
@@ -11,14 +10,7 @@ def read(text):
     output_file = "output.mp3"
     tts.save(output_file)
 
-    # Initialize Pygame mixer
-    pygame.mixer.init()
-    pygame.mixer.music.load(output_file)
-    pygame.mixer.music.play()
-
-    # Wait for the audio to finish playing
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
+    playsound(output_file)
 
 
 if __name__ == "__main__":
