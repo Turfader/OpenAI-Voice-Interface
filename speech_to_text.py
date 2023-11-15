@@ -2,8 +2,9 @@ import io
 import pyaudio
 import wave
 from google.cloud import speech
-from google.cloud.speech import enums
-from google.cloud.speech import types
+from google.cloud import speech_v1p1beta1 as speech
+from google.cloud.speech_v1p1beta1 import enums
+
 
 def transcribe_microphone():
     # Initialize PyAudio
