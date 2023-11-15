@@ -1,20 +1,23 @@
-import json
+import dotenv
 import openai
 from openai import OpenAI
+import os
 
-with open('.\\venv\\config.json') as config_file:
-    config = json.load(config_file)
-    api_key = config['API_KEY']
-
+dotenv.load_dotenv()
+api_key = os.getenv("API_KEY")
 
 client = OpenAI(api_key=api_key)
+
 while True:
+    #user_input = input("Ask the AI something: ")
+    user_input = 'This is a test. Please say "Hello world"'
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-        {"role": "user", "content": input("Ask the AI something")}
+        {"role": "system", "content": "You are an AI assistant, used for testing code"},
+        {"role": "user", "content": user_input}
       ]
     )
 
     print(completion.choices[0].message)
+    break
