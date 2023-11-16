@@ -50,6 +50,7 @@ def transcribe_microphone():
         with sr.AudioFile("microphone_input.wav") as source:
             audio_data = recognizer.record(source)  # Read the entire audio file
             recognized_text = recognizer.recognize_sphinx(audio_data)
+            print(f'Sphinx thinks you said: {recognized_text}')
             return recognized_text
     except sr.UnknownValueError:
         return "Sphinx could not understand audio"
