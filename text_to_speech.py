@@ -1,5 +1,4 @@
 from gtts import gTTS
-import pygame
 import os
 import sys
 # I have abandoned the playsound library. Pygame works. I'm not touching it.
@@ -11,6 +10,8 @@ def read(text):
 
     # Save the speech as an MP3 file
     output_file = "output.mp3"
+    if os.path.exists(output_file):
+        os.remove(output_file)
     tts.save(output_file)
 
     # Redirect stdout to a null device
@@ -27,6 +28,9 @@ def read(text):
     # Wait for the audio to finish playing
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
+
+    pygame.mixer.quit()
+
 
 
 if __name__ == "__main__":
