@@ -1,13 +1,10 @@
 import dotenv
 from openai import OpenAI
-import os
 from text_to_speech import read
 from speech_to_text import transcribe_microphone
 
 dotenv.load_dotenv()
-api_key = os.getenv("API_KEY")
-
-client = OpenAI(api_key=api_key)
+client = OpenAI()
 
 while True:
     # user_input = input("Ask the AI something: ")
