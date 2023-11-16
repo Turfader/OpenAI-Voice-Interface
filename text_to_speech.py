@@ -32,6 +32,5 @@ def read(text):
     pygame.mixer.quit()
 
 
-
 if __name__ == "__main__":
     read("hello world")
