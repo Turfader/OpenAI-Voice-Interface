@@ -2,6 +2,7 @@ import dotenv
 import openai
 from openai import OpenAI
 import os
+from text_to_speech import read
 
 dotenv.load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -20,4 +21,5 @@ while True:
     )
 
     print(completion.choices[0].message)
+    read(str(completion.choices[0].message.content))
     break
