@@ -1,9 +1,6 @@
-import io
+import speech_recognition as sr
 import pyaudio
 import wave
-from google.cloud import speech
-from google.cloud import speech_v1p1beta1 as speech
-from google.cloud.speech_v1p1beta1 import enums
 
 
 def transcribe_microphone():
@@ -45,28 +42,22 @@ def transcribe_microphone():
     wf.writeframes(b"".join(frames))
     wf.close()
 
-    # Transcribe the saved audio file using Google Cloud Speech-to-Text API
-    client = speech.SpeechClient()
+    # Transcribe the saved audio file using PocketSphinx
+    recognizer = sr.Recognizer()
 
-    with io.open("microphone_input.wav", "rb") as audio_file:
-        content = audio_file.read()
+    try:
+        # Use the PocketSphinx recognizer to transcribe the audio file
+        with sr.AudioFile("microphone_input.wav") as source:
+            audio_data = recognizer.record(source)  # Read the entire audio file
+            recognized_text = recognizer.recognize_sphinx(audio_data)
+            return recognized_text
+    except sr.UnknownValueError:
+        return "Sphinx could not understand audio"
+    except sr.RequestError as e:
+        return f"Error with Sphinx recognition: {e}"
 
-    audio = types.RecognitionAudio(content=content)
-    config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=rate,
-        language_code="en-US"
-    )
 
-    response = client.recognize(config=config, audio=audio)
-
-    # Extract transcribed text
-    transcribed_text = ""
-    for result in response.results:
-        transcribed_text += result.alternatives[0].transcript + " "
-
-    return transcribed_text
-
-# Transcribe speech from microphone
-recorded_text = transcribe_microphone()
-print("Recorded Text:", recorded_text)
+if __name__ == "__main__":
+    # Usage:
+    recorded_text = transcribe_microphone()
+    print("Recorded Text:", recorded_text)
