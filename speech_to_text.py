@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import pyaudio
 import wave
+import keyboard
 
 
 def transcribe_microphone():
@@ -12,18 +13,21 @@ def transcribe_microphone():
     channels = 1
     rate = 16000
     chunk = 1024
-    record_seconds = 5  # Adjust as needed
+
+    frames = []
+
+    print("Press and hold the space bar to record...")
+
+    # Record audio while the space bar is being held down
+    keyboard.wait('space')
+    print("Recording...")
 
     # Open microphone stream
     stream = audio.open(format=format, channels=channels,
                         rate=rate, input=True,
                         frames_per_buffer=chunk)
-    print("Recording...")
 
-    frames = []
-
-    # Record audio from the microphone
-    for i in range(0, int(rate / chunk * record_seconds)):
+    while keyboard.is_pressed('space'):  # Continuously record while space is pressed
         data = stream.read(chunk)
         frames.append(data)
 
@@ -35,7 +39,7 @@ def transcribe_microphone():
     audio.terminate()
 
     # Save the recorded audio as a WAV file
-    wf = wave.open("microphone_input.wav", "wb")
+    wf = wave.open("input.wav", "wb")
     wf.setnchannels(channels)
     wf.setsampwidth(audio.get_sample_size(format))
     wf.setframerate(rate)
@@ -47,7 +51,7 @@ def transcribe_microphone():
 
     try:
         # Use the PocketSphinx recognizer to transcribe the audio file
-        with sr.AudioFile("microphone_input.wav") as source:
+        with sr.AudioFile("input.wav") as source:
             audio_data = recognizer.record(source)  # Read the entire audio file
             recognized_text = recognizer.recognize_sphinx(audio_data)
             print(f'Sphinx thinks you said: {recognized_text}')
